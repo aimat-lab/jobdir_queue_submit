@@ -13,11 +13,9 @@ Python class to manage job directories and submit batch jobs.
 # General
 The concept of this pyhton class is to have a neat interface to manage a folder with multiple jobdirectories.
 Having a managed directory, jobs can be submitted from via a queueing system like slurm.
-The goal is to be able to submit array-jobs via python, providing functions like run,check,wait,cancel etc. for this jobdirectory.
-Ideally, also workflows could be realised, by creating a python module that can be called from comandline.
+The goal is to be able to submit array-jobs via python, providing functions like run for this jobdirectory.
 In [commands](mjdir/commands), modules should be collected that are used to generate and read input for specific task and programs.
-They will use python libraries like ase or pymatgen. The main class is sought to have as little dependencies as possible, ideally none.
-A ssh version could be realised but for now, the python functions have to be run on the cluster, i.e. where a queueing system is available.
+The main class is sought to have as little dependencies as possible, ideally none.
 The directory management should be os-independent. 
 A documentation can be found in [docs](docs).
 

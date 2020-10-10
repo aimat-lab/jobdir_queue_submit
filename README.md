@@ -44,7 +44,7 @@ maindir = MultiJobDirectory("Name","filepath")
 Then create "jobs" (which are empty subdirectories)
 
 ```python
-maindir.add("Calc_1",command=None)
+maindir.add("Calc_1")
 ```
 Create Input via own custom functions using libraries like ase or pymatgen.
 

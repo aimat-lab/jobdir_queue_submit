@@ -1,9 +1,3 @@
-"""
-Commands for Turbomole DFT calculations. Input/Output is generated with ASE.
-
-@author: Patrick Reiser
-"""
-
 import os
 import re
 import subprocess
@@ -13,39 +7,49 @@ import subprocess
 #Example Commands
 TURBOMOLE_SLURM_HEADERS = {"int-nano": ''.join(['module purge\n',
                                 #'export PARA_ARCH=SMP\n',
+                                'export PARNODES=$SLURM_NPROCS\n',
                                 'module load turbomole/7.4.1\n',
-                                'cd $SLURM_SUBMIT_DIR\n',
+                                'cd $SLURM_SUBMIT_DIR\n'
                                 #'export TURBODIR=/shared/software/chem/TURBOMOLE/TURBOMOLE-V7.4.1\n',
                                 #'export PATH=$TURBODIR/scripts:$PATH\n',
                                 #'export PATH=$TURBODIR/bin/`sysname`:$PATH\n',
-                                'export PARNODES=$SLURM_NPROCS\n'
                                 #'export OMP_NUM_THREADS=$SLURM_NPROCS\n'
                                 ]),
                             "for-hlr": ''.join(['module purge\n',
                                 #'export PARA_ARCH=SMP\n',
+                                'export PARNODES=$SLURM_NPROCS\n'
                                 'module load chem/turbomole/7.3\n',
-                                'cd $SLURM_SUBMIT_DIR\n',
+                                'cd $SLURM_SUBMIT_DIR\n'
                                 #'export TURBODIR=/shared/software/chem/TURBOMOLE/TURBOMOLE-V7.4.1\n',
                                 #'export PATH=$TURBODIR/scripts:$PATH\n',
                                 #'export PATH=$TURBODIR/bin/`sysname`:$PATH\n',
-                                'export PARNODES=$SLURM_NPROCS\n'
                                 #'export OMP_NUM_THREADS=$SLURM_NPROCS\n'
                                 ])
                                }
 
-TURBOMOLE_SLURM_COMMANDS= {"int-nano": {"energy": 'ridft > ridft.out\neiger > atomic.levels.dat\n',
-                                      "gradient":"\n",
-                                      "optimize" :"jobex -ri > add_jobex.out\n",
-                                      "frequencies" : "\n"
-                                      }}
+TURBOMOLE_SLURM_COMMANDS= {"energy": 'cd {path} && ridft > ridft.out',
+                           "eiger": 'cd {path} && eiger > atomic.levels.dat',
+                           "gradient":"",
+                           "optimize" :"cd {path} && jobex -ri > add_jobex.out",
+                           "frequencies" : ""
+                            }
 
 
 
-def load_turbomole_module(command):
-    # Cant be done cleanly
-    pass
 
 def write_turbomole_input(filepath,calc,at):
+    """
+    Write input files for turbomole
+
+    Args:
+        filepath (str,path): File path to destination folder.
+        calc (TYPE): ASE Turbomole object.
+        at (TYPE): ASE atoms object.
+
+    Returns:
+        None.
+
+    """
     workdir =  os.getcwd()
     os.chdir(filepath)
     try:
@@ -59,6 +63,17 @@ def write_turbomole_input(filepath,calc,at):
 
 
 def read_turbomole_output(filepath,calc):
+    """
+    Read turbomole output in ASE turbomole object.
+
+    Args:
+        filepath (str,path): File path to destination folder.
+        calc (TYPE): ASE Turbomole object.
+
+    Returns:
+        calc (TYPE): ASE Turbomole object.
+
+    """
     workdir =  os.getcwd()
     os.chdir(filepath)
     try:
@@ -72,6 +87,16 @@ def read_turbomole_output(filepath,calc):
 
 
 def read_turbomole_eiger_file(path):
+    """
+    Read the ouput of eiger files.
+
+    Args:
+        path (str,path): File path to destination folder.
+
+    Returns:
+        tuple: homo,lumo,toteng.
+
+    """
     homo = None
     lumo = None
     toteng = None

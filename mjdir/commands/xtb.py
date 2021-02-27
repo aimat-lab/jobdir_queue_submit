@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Apr 18 11:28:36 2020
-
-@author: Patrick
-"""
-
 import numpy as np
 import os
 
@@ -35,12 +28,22 @@ XTB_SLURM_HEADER = {'default': ''.join([
 }
 
 #Use %input coordinates here
-XTB_SLURM_COMMANDS = { 'default' : { 'singlepoint' : 'xtb --scc %s > output.txt\n',
+XTB_SLURM_COMMANDS = { 'singlepoint' : 'xtb --scc %s > output.txt\n',
                                     'vIPEA' : 'xtb --vipea %s > output.txt\n'
                         }
-        }
+
 
 def read_homo_lumo(path):
+    """
+    Read hom lumo from output
+
+    Args:
+        path (str): Filepath to destination folder.
+
+    Returns:
+        tuple: homo,lumo
+
+    """
     homo = None
     lumo = None
     with open(os.path.join(path,"output.txt"),"r") as f:
@@ -57,6 +60,19 @@ def read_homo_lumo(path):
 
 #xtb can have xyz input file
 def exportXYZ(filename,coords,elements,mask=[]):
+    """
+    Export a XYZ file
+
+    Args:
+        filename (str): filepath of target file.
+        coords (list): list of coordinates.
+        elements (list): list of elements.
+        mask (list, optional): Mask. Defaults to [].
+
+    Returns:
+        None.
+
+    """
     outfile=open(filename,"w")
     if len(mask)==0:
         outfile.write("%i\n\n"%(len(elements)))
@@ -74,6 +90,10 @@ def exportXYZ(filename,coords,elements,mask=[]):
 #xtb can have turbomole inputfile
 def write_turbomole(filename, atoms):
     """Method to write turbomole coord file
+    
+    Args:
+        filename (str): Filepath of filename.
+        atoms (TYPE): Atoms
     """
     from ase.constraints import FixAtoms
     from ase.units import Bohr

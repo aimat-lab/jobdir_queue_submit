@@ -312,7 +312,7 @@ class MultiJobDirectory(object):
             asyn (int): Number of asynchronous commands to start.
             header (str): Header for queueing system that is written to bash script.
             command (str):  Default command to run if no command is specified. 
-            command_arguments (list): Arguments that can be used by command.
+            command_arguments (list): Arguments that can be formatted into command.
                                       Default include {path} variable for the command string.
             queue_properties (dict): Queue specific parameters for scripts. Default is {}.
                                      Each queue system will enter default values.
@@ -326,8 +326,8 @@ class MultiJobDirectory(object):
         #Get Paths
         sub_jobs = self.get(jobs)
         sub_keys = list(sub_jobs.keys())
-        sub_path = [{y : sub_jobs[x][y] for y in command_arguments} for x in sub_keys]
         sub_cmd = [sub_jobs[x]['command'] if 'command' in sub_jobs[x] else command for x in sub_keys ]
+        sub_path = [{y : sub_jobs[x][y] for y in command_arguments if y in sub_jobs[x]} for x in sub_keys]
 
         #Get job array size
         len_jobs = len(sub_keys)

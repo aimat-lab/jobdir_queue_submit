@@ -1,68 +1,62 @@
-"""
-Slurm functions.
-
-@author: Patrick
-"""
-
 import subprocess
 import os
 
-def _get_jobs_from_slurmlog(dirmain,logfile,full_path=False):
-    """check a possible log file for individual commands"""
-    scr_path = os.path.join(dirmain,logfile)
-    output = []
-    if(os.path.exists(scr_path)==True):
-        with open(scr_path,"r") as file:
-            for line in file:
-                if(line.split(":")[0] != ''):
-                    out = line.split(":")[0]
-                    if(full_path == True):
-                        output.append(os.path.join(dirmain,out))
-                    else:
-                        output.append(out)
-    else:
-        print("Warning: Could not find log")
-    return output
+
+SLURM_DEFUALT_PROPS = {
+    'time' : "1:00:00",
+    'nodes' : "1",
+    'tasks' : "1"
+    }
 
 
-###########################################################################
-# Functions for queue io
-###########################################################################    
-
-def _make_slurm_script(dirmain,slurm_name,name_list=[],pathlist=[],commands=[],header="\n",sl_time="10:00:00",sl_nodes = "1",sl_tasks = "10"):
+def make_slurm_script(dirmain,slurm_name,asyn = 0,
+                      name_list=[],
+                      pathlist=[],
+                      commands=[],
+                      header="\n",
+                      slurm_variables = SLURM_DEFUALT_PROPS):
     """Make bash script for unix for name,path and command list"""
+    
     scriptpath = os.path.join(dirmain,slurm_name)
     slurmout = os.path.join(dirmain,"slurm_%j.output")
+    bash_variables = {}
+    bash_variables.update(SLURM_DEFUALT_PROPS)
+    bash_variables.update(slurm_variables)
+    
     with open(scriptpath, 'w') as rsh:
         rsh.write('#! /bin/bash\n')
-        rsh.write('#SBATCH --time=%s\n'%sl_time)
         rsh.write('#SBATCH --job-name=%s\n'%slurm_name)
-        rsh.write('#SBATCH --nodes=%s\n'%sl_nodes)
-        rsh.write('#SBATCH --ntasks-per-node=%s\n'%sl_tasks)
         rsh.write('#SBATCH --output=%s\n'%slurmout)
+        
+        for keys,values in bash_variables.items():
+            rsh.write('#SBATCH --{key}={value}\n'.format(key=keys,value=values))
+        
         rsh.write('\n')
         rsh.write(header)
         rsh.write('\n')
         for i,path in enumerate(pathlist):
-            rsh.write('cd %s\n'%path)
-            rsh.write(commands[i])
-            rsh.write('\n')   
-            rsh.write('cd %s\n'%dirmain)
-            rsh.write('echo "%s:ended in script %s" >> log_%s.txt\n'%(name_list[i],slurm_name, os.path.splitext(slurm_name)[0]))
-            rsh.write('\n')    
+            rsh.write(commands[i].format(**path))
+            if(asyn > 0):
+                 rsh.write(' &\n')  
+            else:
+                rsh.write('\n')   
+            rsh.write('echo "info: submitted {path}" \n'.format(path=path)) 
+            if(asyn>0 and (i+1)%asyn ==0):
+                rsh.write('wait\n')  
 
-def _make_slurm_sub(dirmain,slurm_submit,slurm_partition=None):
+
+def make_slurm_sub(dirmain,slurm_submit,bash_submit={}):
     """ make submission command for slurm via sbatch"""
     sbatch_cmd = ['sbatch']
-    if(slurm_partition != None):
-        sbatch_cmd = sbatch_cmd + ['-p',slurm_partition]
+    for keys,values in bash_submit.items():
+        sbatch_cmd = sbatch_cmd + [keys,values]
     sbatch_cmd = sbatch_cmd + [os.path.join(dirmain,slurm_submit)]
     proc = subprocess.run(sbatch_cmd,capture_output=True)
     id_sub = proc.stdout.decode('utf8').strip().split(" ")[-1]
     return id_sub
 
 
-def _make_slurm_queue(dirmain,print_level = 0):
+def make_slurm_queue(dirmain,print_level = 0):
     """get queue list from slurm """
     #Check slurm
     list_ids = []
@@ -87,3 +81,22 @@ def _make_slurm_queue(dirmain,print_level = 0):
     if(print_level == 2):
         print("Number of Slurms tasks running for this directory:" , len(list_scripts))  
     return list_ids,list_scripts
+
+
+
+# def _get_jobs_from_slurmlog(dirmain,logfile,full_path=False):
+#     """check a possible log file for individual commands"""
+#     scr_path = os.path.join(dirmain,logfile)
+#     output = []
+#     if(os.path.exists(scr_path)==True):
+#         with open(scr_path,"r") as file:
+#             for line in file:
+#                 if(line.split(":")[0] != ''):
+#                     out = line.split(":")[0]
+#                     if(full_path == True):
+#                         output.append(os.path.join(dirmain,out))
+#                     else:
+#                         output.append(out)
+#     else:
+#         print("Warning: Could not find log")
+#     return output

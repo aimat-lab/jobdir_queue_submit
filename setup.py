@@ -12,7 +12,7 @@ setup(
     description="Manager for job submission for queueing system",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/aimat-lab/jobdir_queue_submit",
     #install_requires=[],
     extras_require={
         "ase": ["ase>=3.0.0"],

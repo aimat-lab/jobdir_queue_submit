@@ -1,24 +1,18 @@
-"""The concept of this pyhton class is to have a neat interface to manage a folder with multiple jobdirectories.
-Having a managed directory, jobs can be submitted from there via a queueing system like slurm.
-The goal is to be able to submit array-jobs via python, providing functions like run,check,wait,cancel etc. for this jobdirectory.
-In commands, modules should be collected that are used to generate and read input for specific task and programs.
-The directory management should be os-independent. 
-
-@author: Patrick Reiser
-"""
-
 import os
 import shutil
 import json
 import subprocess
 import datetime
 
-from mjdir.queue.slurm import _make_slurm_queue,_make_slurm_script,_make_slurm_sub
+
+from mjdir.queue.slurm import make_slurm_queue,make_slurm_script,make_slurm_sub
+
 
 class MultiJobDirectory(object):
     """Class to manage jobs and submit array of task with queue system eg. slurm.
-    Concept is job "=" a directory from wich the commands are run
-    The function run() basically makes script that goes to jobdirectory and execute a given command.
+    
+    Concept is each subjob "=" a directory from wich the commands are run.
+    The function run() submits a script that goes to a job directory and execute a given command.
     """
     
     def __init__(self,name,dirpath=os.path.join(os.path.expanduser("~"),"MultiJobDirectory")):
@@ -32,13 +26,6 @@ class MultiJobDirectory(object):
         
         self.submit_type = "SLURM" # Only possible queue system supported
         
-        #Slurm settings
-        self.slurm_header = None
-        self.slurm_time = "10:00:00"
-        self.slurm_nodes = "1"
-        self.slurm_tasks = "10"
-        self.slurm_partition = None
-
         
         #File Management
         self.maindirpath = dirpath
@@ -221,7 +208,6 @@ class MultiJobDirectory(object):
             if(is_folder==False):
                 os.mkdir(jobpath)
             if(is_jobentry == True):
-                
                 self.jobinfo[job].update({"path" : str(jobpath) , "modified" : str(datetime.datetime.now()) })
             else:
                  self.jobinfo[job] = {"path" : str(jobpath) , "created" : str(datetime.datetime.now()) }
@@ -295,6 +281,8 @@ class MultiJobDirectory(object):
                 return {jobs : self.jobinfo[jobs]}
             else:
                 print("Warning: job not found.")
+        if isinstance(jobs,dict):
+            jobs = list(jobs.keys())
         if isinstance(jobs, list):
             joblist = {x: self.jobinfo[x] for x in jobs if x in alljobs}
             if(len(joblist)<len(jobs)):
@@ -305,20 +293,30 @@ class MultiJobDirectory(object):
 
         
 
-    def run(self,jobs=0,procs = 1,command=None,header=None,prepare_only=False):
+    def run(self,jobs=0,procs = 1,asyn = 0,
+            header=None,
+            command=None,
+            queue_properties = {},
+            submit_properties={},
+            prepare_only=False):
         """Main function to start e.g. slurm arrays from jobs. The command is taken from the command 
         dictionary if not None and has preference over the command given in function call.
         
         Args:
             jobs (str,list,int): Job names to run. Can be single string, list of names or int.
-                                  If (int) the index of all available jobs is taken: joblist[jobs:]
-                                  jobs = 0 means all jobs
-                                  jobs = -1 means last job in directory list (sorted by name?)
+                                 If (int) the index of all available jobs is taken: joblist[jobs:]
+                                 jobs = 0 means all jobs
+                                 jobs = -1 means last job in directory list (sorted by name?)
             procs (int): Number of bash scripts to start.            
-            command (str):  default command to run if no command is specified.
-            header (str):   header for queueing system that is written to bash script.
-                            If the member self.header = None is not None, self.header will be used before header from function call.
-            prepare_only (bool): Whether to only make scripts etc. but not acutally run them
+            asyn (int): Number of asynchronous commands to start.
+            header (str): Header for queueing system that is written to bash script.
+            command (str):  Default command to run if no command is specified. 
+                            Can include {path} variable for the job path.
+            queue_properties (dict): Queue specific parameters for scripts. Default is {}.
+                                     Each queue system will enter default values.
+            submit_properties (dict): Queue specific parameters for submission. Default is {}.
+                                        Like {'-p',"partition"}
+            prepare_only (bool): Whether to only make scripts etc. but not acutally run them.
         
         Returns:
             queue_ids (list): The ruturn e.g. ids of the submission call
@@ -326,7 +324,7 @@ class MultiJobDirectory(object):
         #Get Paths
         sub_jobs = self.get(jobs)
         sub_keys = list(sub_jobs.keys())
-        sub_path = [sub_jobs[x]['path'] for x in sub_keys]
+        sub_path = [sub_jobs[x] for x in sub_keys]
         sub_cmd = [sub_jobs[x]['command'] if 'command' in sub_jobs[x] else command for x in sub_keys ]
 
         #Get job array size
@@ -340,14 +338,17 @@ class MultiJobDirectory(object):
             num = self._get_free_bash_index()
             bash_submit= "%s_%i.sh"%(self.dirname,num)
             if(self.submit_type == "SLURM"):
-                _make_slurm_script(self.dirmain,bash_submit,
+                make_slurm_script(self.dirmain,bash_submit,asyn,
                                     sub_keys[i:i + len_per_array],
                                     sub_path[i:i + len_per_array],
                                     sub_cmd[i:i + len_per_array],
-                                    header=header)
+                                    header=header,
+                                    slurm_variables = queue_properties
+                                    )
             if(prepare_only == False):
                 if(self.submit_type == "SLURM"):
-                    id_sub = _make_slurm_sub(self.dirmain,bash_submit)
+                    id_sub = make_slurm_sub(self.dirmain,bash_submit,
+                                            submit_properties)
                     id_list.append(id_sub) 
         #submits
         return id_list
@@ -368,7 +369,7 @@ class MultiJobDirectory(object):
         list_ids = []
         list_scripts = []
         if(self.submit_type == "SLURM"):
-            list_ids,list_scripts = _make_slurm_queue(self.dirmain,print_level=print_level)
+            list_ids,list_scripts = make_slurm_queue(self.dirmain,print_level=print_level)
         
         return list_ids,list_scripts
     

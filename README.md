@@ -51,10 +51,22 @@ maindir.add({"Calc_4": {"command": 'echo "{path}" '} })
 Get the current path list and information of all available directories via get or for a specific sublist.
 
 ```python
-print(maindir.get())
+maindir.get()  # list all
 maindir.get("Calc_1")
 ```
+The class python dict holds a job plus path and additional information. You can delete entries via
 
+```python
+maindir.remove()  # remove all
+maindir.remove("Calc_1")
+```
+However, they physical subdirectories are not deleted. You can save and reload the python dict.
+
+```python
+maindir.save() 
+maindir.load()
+maindir.load(add_existing=True)  # Can add all subdirectories without information
+```
 Create Input via own custom functions using libraries like ase or pymatgen.
 
 ```python

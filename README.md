@@ -54,7 +54,7 @@ Get the current path list and information of all available directories via `get(
 maindir.get()  # list all
 maindir.get("Calc_1")
 ```
-The class python dict holds a job plus path and additional information. You can delete entries via `remove()`. However, they physical subdirectories are not deleted.
+The class python dict holds a job plus path and additional information. You can delete entries via `remove()`. However, their physical subdirectories are not deleted!!
 
 ```python
 maindir.remove()  # remove all

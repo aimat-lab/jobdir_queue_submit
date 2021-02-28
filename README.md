@@ -41,7 +41,7 @@ The basic idea of the interface is as follows: Create or load the main directory
 from mjdir.MultiJobDirectory import MultiJobDirectory
 maindir = MultiJobDirectory("Name","filepath")
 ```
-Then create multiple "jobs", for which empty physical subdirectories are utomatically created by the python class.
+Then create multiple "jobs", for which empty physical subdirectories are automatically created by the python class.
 
 ```python
 maindir.add("Calc_1")

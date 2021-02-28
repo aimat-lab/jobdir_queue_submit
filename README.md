@@ -87,8 +87,15 @@ slurm_params = { 'tasks' : "10",
 submit_properties = {'-p':'normal'}
 ```
 
-And then run all jobs or a specific selection of available jobs with run(). Here you can specify a number of properties. Like default command as string, the number of submits the jobs are distributed on and how many commands should be started asynchronously within one submission. The asynchronous execution must be compatible with the program and the system to use on. For more information see [commands](mjdir/commands) and [queue](mjdir/queue). Finally a set of bash scripts are generated and submitted. To inspect the submission without running, use prepare_only=True.
+And then run all jobs or a specific selection of available jobs with run(). Here you can specify a number of properties. Like default command as string, the number of submits the jobs are distributed on and how many commands should be started asynchronously within one submission. The asynchronous execution must be compatible with the program and the system to use on. For more information see [commands](mjdir/commands) and [queue](mjdir/queue). Finally a set of bash scripts are generated and submitted. To inspect the submission without running, use prepare_only=True and look into the main directory.
 
 ```python
-maindir.run(procs=5,command="#Do a bash command here\n")
+maindir.run(procs = 1,
+	    asyn = 0,
+            header="module purge",
+            command= "# If not sepcified in add() use this",
+            command_arguments = ['path'],
+            queue_properties = slurm_params,
+            submit_properties = submit_properties ,
+            prepare_only = False)
 ```

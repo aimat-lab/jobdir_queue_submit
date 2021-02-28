@@ -65,7 +65,7 @@ However, they physical subdirectories are not deleted. You can save and reload t
 ```python
 maindir.save() 
 maindir.load()
-maindir.load(add_existing=True)  # Can add all subdirectories without information
+maindir.load(add_existing=True)  # Can add all physical subdirectories without information
 ```
 Create Input via own custom functions using libraries like ase or pymatgen.
 

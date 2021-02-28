@@ -197,9 +197,9 @@ class MultiJobDirectory(object):
             job (str,list,dict): Job names to be created. Either single string or list of strings
             
         Return:
-            pathlist (str,list,dict): Path to the created file directories (string or list)
+            pathlist (dict): Path to the created file directories (string or list)
         """
-        pathlist = None
+        pathlist = {}
         if(isinstance(job, str) == True):
             job = self._clean_jobname(job)            
             jobpath = os.path.join(self.dirmain,job)
@@ -208,12 +208,11 @@ class MultiJobDirectory(object):
             if(is_folder==False):
                 os.mkdir(jobpath)
             if(is_jobentry == True):
-                self.jobinfo[job].update({"path" : str(jobpath) , "modified" : str(datetime.datetime.now()) })
+                self.jobinfo[job].update({"path" : str(jobpath)  }) # ,  "modified" : str(datetime.datetime.now())
             else:
-                 self.jobinfo[job] = {"path" : str(jobpath) , "created" : str(datetime.datetime.now()) }
-            pathlist = jobpath
+                 self.jobinfo[job] = {"path" : str(jobpath)  } # , "created" : str(datetime.datetime.now())
+            pathlist.update({job : self.jobinfo[job]})
         if(isinstance(job, list) == True): 
-            pathlist = []
             for i in range(0,len(job)):
                 i_job = self._clean_jobname(job[i])
                 jobpath = os.path.join(self.dirmain,i_job)
@@ -222,12 +221,11 @@ class MultiJobDirectory(object):
                 if(is_folder==False):
                     os.mkdir(jobpath)
                 if(is_jobentry == True and is_folder == True):
-                    self.jobinfo[i_job].update({"path" : str(jobpath) , "modified" : str(datetime.datetime.now()) })
+                    self.jobinfo[i_job].update({"path" : str(jobpath)  })
                 else:
-                    self.jobinfo[i_job] = {"path" : str(jobpath) , "created" : str(datetime.datetime.now()) }
-                pathlist.append(jobpath)
+                    self.jobinfo[i_job] = {"path" : str(jobpath)  }
+                pathlist.update({i_job : self.jobinfo[i_job]})
         if(isinstance(job, dict) == True): 
-            pathlist = []
             for key,value in job.items():
                 i_job = self._clean_jobname(key)
                 jobpath = os.path.join(self.dirmain,i_job)
@@ -238,12 +236,12 @@ class MultiJobDirectory(object):
                 jobaddinfo = {}
                 jobaddinfo.update(value)
                 if(is_jobentry == True and is_folder == True):
-                    jobaddinfo.update({"path" : str(jobpath) , "modified" : str(datetime.datetime.now()) }) 
+                    jobaddinfo.update({"path" : str(jobpath) }) 
                     self.jobinfo[i_job].update(jobaddinfo)
                 else:
-                    jobaddinfo.update({"path" : str(jobpath) ,  "created" : str(datetime.datetime.now()) }) 
+                    jobaddinfo.update({"path" : str(jobpath)  }) 
                     self.jobinfo[i_job] = jobaddinfo
-                pathlist.append(jobpath)
+                pathlist.update({i_job : self.jobinfo[i_job]})
         
         return pathlist
         
@@ -263,8 +261,8 @@ class MultiJobDirectory(object):
             outlist (dict): Filepath of existing job/joblist requested in jobs input
         """
         alljobs = list(self.jobinfo.keys())
-        alljobs_dir = self._get_directory_list(self.dirmain)
         if(add_existing == True):
+            alljobs_dir = self._get_directory_list(self.dirmain)
             found_dirs = False
             for x in alljobs_dir:
                 if(x not in alljobs):
@@ -291,7 +289,26 @@ class MultiJobDirectory(object):
         return joblist
     
 
+    def remove(self,jobs=0):
+        """
+        Remove jobdict from list of jobs, but does NOT delete physical directory.
         
+        Args:
+            jobs (str,int,list): Job names to get path for. Can be single string, list of names or int.
+                                 If (int) the index of all available jobs is taken: joblist[jobs:]
+                                 jobs = 0 means all jobs
+                                 jobs = -1 means last job in directory list (sorted by name?)
+                                 
+        Returns:
+            None
+        """
+        jobs_to_remove = list(self.get(jobs).keys())
+        
+        for x in jobs_to_remove:
+            self.jobinfo.pop(x)
+        
+        
+    
 
     def run(self,jobs=0,procs = 1,asyn = 0,
             header="",

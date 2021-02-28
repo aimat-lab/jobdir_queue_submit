@@ -48,26 +48,28 @@ maindir.add("Calc_1")
 maindir.add(["Calc_2","Calc_3"])
 maindir.add({"Calc_4": {"command": 'echo "{path}" '} })
 ```
-Get the current path list and information of all available directories via get or for a specific sublist.
+Get the current path list and information of all available directories via get() or for a specific sublist.
 
 ```python
 maindir.get()  # list all
 maindir.get("Calc_1")
 ```
 The class python dict holds a job plus path and additional information. You can delete entries via
+However, they physical subdirectories are not deleted.
 
 ```python
 maindir.remove()  # remove all
 maindir.remove("Calc_1")
 ```
-However, they physical subdirectories are not deleted. You can save and reload the python dict.
+You can save and reload the python dict and also add existing directories that may not be in the pyhton dict if necessary.
 
 ```python
 maindir.save() 
 maindir.load()
 maindir.load(add_existing=True)  # Can add all physical subdirectories without information
 ```
-Create Input via own custom functions using libraries like ase or pymatgen.
+Create Input via own custom functions using libraries like ase or pymatgen that take a directory filepath as input.
+The path can be obtained by get().
 
 ```python
 def write_input(filepath ):
@@ -76,6 +78,11 @@ def write_input(filepath ):
 	
 write_input( maindir.get()["Calc_1"]['path'] )
 ```
+Modify and adjust queue settings. 
+```python
+
+```
+
 And then run list of jobs or all subdirectries with run():
 
 ```python

@@ -35,7 +35,7 @@ A set of examples can be found in [examples](examples), that demonstrate usage a
 <a name="usage"></a>
 # Usage
 
-The basic idea of the interface is as follows: Create or load the main directory.
+The basic idea of the interface is as follows: Create or load the main directory. Be careful and check where you place the main directory before generating a large number of jobst.
 
 ```python
 from mjdir.MultiJobDirectory import MultiJobDirectory

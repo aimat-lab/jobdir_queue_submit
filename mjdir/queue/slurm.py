@@ -40,7 +40,7 @@ def make_slurm_script(dirmain,slurm_name,asyn = 0,
                  rsh.write(' &\n')  
             else:
                 rsh.write('\n')   
-            rsh.write('echo "info: submitted {path}" \n'.format(path=path)) 
+            rsh.write('echo "Info: {job} submitted at {path}"\n'.format(path=path, job=name_list[i] )) 
             if(asyn>0 and (i+1)%asyn ==0):
                 rsh.write('wait\n')  
 

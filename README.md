@@ -54,8 +54,7 @@ Get the current path list and information of all available directories via get()
 maindir.get()  # list all
 maindir.get("Calc_1")
 ```
-The class python dict holds a job plus path and additional information. You can delete entries via
-However, they physical subdirectories are not deleted.
+The class python dict holds a job plus path and additional information. You can delete entries via remove(). However, they physical subdirectories are not deleted.
 
 ```python
 maindir.remove()  # remove all
@@ -87,7 +86,7 @@ slurm_params = { 'tasks' : "10",
 submit_properties = {'-p':'normal'}
 ```
 
-And then run all jobs or a specific selection of available jobs with run(). Here you can specify a number of properties. Like default command as string, the number of submits the jobs are distributed on and how many commands should be started asynchronously within one submission. The asynchronous execution must be compatible with the program and the system to use on. For more information see [commands](mjdir/commands) and [queue](mjdir/queue). Finally a set of bash scripts are generated and submitted. To inspect the submission without running, use prepare_only=True and look into the main directory.
+And then run all jobs or a specific selection of available jobs with run(). Here you can specify a number of properties. Like default command as string, the number of submits the jobs are distributed on and how many commands should be started asynchronously within one submission. The asynchronous execution must be compatible with the program and the system to use on. For more information see [commands](mjdir/commands) and [queue](mjdir/queue). Finally a set of bash scripts are generated and submitted. To inspect the submission without running, use prepare_only=True and look into the main directory. The command is a string representing a bash command which is formatted by arguments provided by add() and enabled by command_arguments. Path information is available by default.
 
 ```python
 maindir.run(procs = 1,

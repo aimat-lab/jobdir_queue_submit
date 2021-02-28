@@ -28,8 +28,8 @@ XTB_SLURM_HEADER = {'default': ''.join([
 }
 
 #Use %input coordinates here
-XTB_SLURM_COMMANDS = { 'singlepoint' : 'xtb --scc %s > output.txt\n',
-                                    'vIPEA' : 'xtb --vipea %s > output.txt\n'
+XTB_SLURM_COMMANDS = { 'singlepoint' : 'cd {path} && xtb --scc {input} > output.txt',
+                      'vIPEA' : 'cd {path} && xtb --vipea {input} > output.txt'
                         }
 
 

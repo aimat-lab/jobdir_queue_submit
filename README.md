@@ -41,11 +41,20 @@ The basic idea of the interface is as follows: Create or load the main directory
 from mjdir.MultiJobDirectory import MultiJobDirectory
 maindir = MultiJobDirectory("Name","filepath")
 ```
-Then create "jobs" (which are empty subdirectories)
+Then create multiple "jobs", which are empty subdirectories automatically created.
 
 ```python
 maindir.add("Calc_1")
+maindir.add(["Calc_2","Calc_3"])
+maindir.add({"Calc_4": {"command": 'echo "{path}" '} })
 ```
+Get the current path list and information of all available directories via get or for a specific sublist.
+
+```python
+print(maindir.get())
+maindir.get("Calc_1")
+```
+
 Create Input via own custom functions using libraries like ase or pymatgen.
 
 ```python
@@ -53,7 +62,7 @@ def write_input(filepath ):
     # Do something
     return 0
 	
-write_input( maindir.get("Calc_1") )
+write_input( maindir.get()["Calc_1"]['path'] )
 ```
 And then run list of jobs or all subdirectries with run():
 

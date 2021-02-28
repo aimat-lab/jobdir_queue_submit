@@ -69,7 +69,7 @@ maindir.load()
 maindir.load(add_existing=True)  # Can add all physical subdirectories without information
 ```
 Create Input via own custom functions using libraries like ase or pymatgen that take a directory filepath as input.
-The path can be obtained by get().
+The path can be obtained by get(). Some functions are found in [commands](mjdir/commands).
 
 ```python
 def write_input(filepath ):

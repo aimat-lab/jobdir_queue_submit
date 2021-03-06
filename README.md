@@ -23,7 +23,7 @@ A documentation can be found in [docs](docs).
 <a name="installation"></a>
 # Installation
 
-Clone repository and install for example with editable mode:
+Clone repository https://github.com/aimat-lab/jobdir_queue_submit and install for example with editable mode:
 
 ```bash
 pip install -e ./jobdir_queue_submit

@@ -21,7 +21,7 @@ The goal is to be able to submit array-jobs via python, providing the same inter
 In [commands](mjdir/commands), modules should be collected that are used to generate and read input for specific task and programs.
 The main class is sought to have as little dependencies as possible, ideally none.
 The directory management should be os-independent, the submission is not. For the moment only slurm is supported. 
-A [documentation](https://mjdir.readthedocs.io/en/latest/) is generated in [docs](docs).
+A [documentation](https://mjdir.readthedocs.io/en/latest/index.html) is generated in [docs](docs).
 
 <a name="installation"></a>
 # Installation

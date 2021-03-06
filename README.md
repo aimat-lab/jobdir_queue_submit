@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/mjdir/badge/?version=latest)](https://mjdir.readthedocs.io/en/latest/?badge=latest)
+
 # Multiple Job Directory
 
 Python class to manage job directories and submit batch jobs.

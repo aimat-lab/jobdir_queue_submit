@@ -6,6 +6,8 @@
 General Information
 ===================================
 
+Python class to manage job directories and submit batch jobs.
+
 .. toctree::
    :maxdepth: 3
    :caption: General:

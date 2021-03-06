@@ -6,6 +6,12 @@
 General Information
 ===================================
 
+.. toctree::
+   :maxdepth: 3
+   :caption: Information:
+
+   general
+
 Package Content
 ===================================
 

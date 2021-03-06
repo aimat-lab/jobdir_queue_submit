@@ -28,8 +28,6 @@ Clone repository and install for example with editable mode:
 ```bash
 pip install -e ./jobdir_queue_submit
 ```
-## Requirements
-Python 3
 
 <a name="examples"></a>
 # Examples

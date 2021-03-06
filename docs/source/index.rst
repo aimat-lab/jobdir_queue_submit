@@ -8,9 +8,12 @@ General Information
 
 .. toctree::
    :maxdepth: 3
-   :caption: Information:
+   :caption: General:
 
-   general
+   intro
+   usage
+   installation
+
 
 Package Content
 ===================================

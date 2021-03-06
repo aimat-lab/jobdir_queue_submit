@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="mjdir",
-    version="0.1.0",
+    version="0.1.1",
     author="Patrick Reiser",
     author_email="patrick.reiser@kit.edu",
     description="Manager for job submission for queueing system",

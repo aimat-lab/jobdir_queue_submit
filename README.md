@@ -1,4 +1,5 @@
 [![Documentation Status](https://readthedocs.org/projects/mjdir/badge/?version=latest)](https://mjdir.readthedocs.io/en/latest/?badge=latest)
+[![PyPI version](https://badge.fury.io/py/mjdir.svg)](https://badge.fury.io/py/mjdir)
 
 # Multiple Job Directory
 

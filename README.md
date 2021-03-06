@@ -7,6 +7,7 @@ Python class to manage job directories and submit batch jobs.
 # Table of Contents
 * [General](#general)
 * [Installation](#installation)
+* [Documentation](#documentation)
 * [Examples](#examples)
 * [Usage](#usage)
 * [Citing](#citing)
@@ -30,6 +31,10 @@ Clone repository https://github.com/aimat-lab/jobdir_queue_submit and install fo
 ```bash
 pip install -e ./jobdir_queue_submit
 ```
+<a name="documentation"></a>
+# Documentation
+
+Auto-documentation generated at https://mjdir.readthedocs.io/en/latest/
 
 <a name="examples"></a>
 # Examples

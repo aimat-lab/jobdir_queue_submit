@@ -34,7 +34,7 @@ pip install -e ./jobdir_queue_submit
 <a name="documentation"></a>
 # Documentation
 
-Auto-documentation generated at https://mjdir.readthedocs.io/en/latest/
+Auto-documentation generated at https://mjdir.readthedocs.io/en/latest/index.html.
 
 <a name="examples"></a>
 # Examples

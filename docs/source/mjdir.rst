@@ -21,14 +21,6 @@ mjdir.MultiJobDirectory module
    :undoc-members:
    :show-inheritance:
 
-mjdir.wfm module
-----------------
-
-.. automodule:: mjdir.wfm
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

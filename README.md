@@ -33,6 +33,11 @@ Clone repository https://github.com/aimat-lab/jobdir_queue_submit and install fo
 ```bash
 pip install -e ./jobdir_queue_submit
 ```
+or latest release via Python Package Index.
+```bash
+pip install mjdir
+```
+
 <a name="documentation"></a>
 # Documentation
 

@@ -7,6 +7,7 @@ Python class to manage job directories and submit batch jobs.
 * [Installation](#installation)
 * [Examples](#examples)
 * [Usage](#usage)
+* [Citing](#citing)
  
 
 <a name="general"></a>
@@ -97,4 +98,21 @@ maindir.run(procs = 1,
             queue_properties = slurm_params,
             submit_properties = submit_properties ,
             prepare_only = False)
+```
+
+<a name="citing"></a>
+# Citing
+
+If you want to cite the package, try this:
+
+```
+@Misc{,
+    author = {Patrick Reiser},
+    title = {Multiple Job Directory},
+    year = {2020},
+    publisher = {GitHub},
+    journal = {GitHub Repository},
+    howpublished = {\url{https://github.com/aimat-lab/jobdir_queue_submit}},
+    url = "https://github.com/aimat-lab/jobdir_queue_submit"
+}
 ```

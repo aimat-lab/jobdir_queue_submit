@@ -124,7 +124,7 @@ If you want to cite the package, try this:
 ```
 @Misc{,
     author = {Patrick Reiser},
-    title = {Multiple Job Directory},
+    title = {Python Package for Job Directories},
     year = {2020},
     publisher = {GitHub},
     journal = {GitHub Repository},

@@ -14,7 +14,7 @@ Python class to manage job directories and submit batch jobs.
 * [Examples](#examples)
 * [Usage](#usage)
 * [Citing](#citing)
- 
+* [References](#references)
 
 <a name="general"></a>
 # General
@@ -132,3 +132,5 @@ If you want to cite the package, try this:
     url = "https://github.com/aimat-lab/jobdir_queue_submit"
 }
 ```
+<a name="references"></a>
+# References

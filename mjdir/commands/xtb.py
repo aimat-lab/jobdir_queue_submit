@@ -58,7 +58,7 @@ def read_homo_lumo(path):
 
 
 # xtb can have xyz input file
-def exportXYZ(filename, coords, elements, mask=[]):
+def export_xyz(filename, coords, elements, mask=[]):
     """
     Export a XYZ file
 
